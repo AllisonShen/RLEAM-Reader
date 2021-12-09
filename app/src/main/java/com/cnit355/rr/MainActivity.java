@@ -1,6 +1,9 @@
 package com.cnit355.rr;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,6 +35,24 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+    }
+
+
+
+    public void viewDetailsPDF(View view){
+
+    }
+    public void viewDetailsEPUB(View view){
+
+    }
+    public void convertButton(View view){ // pdf to epub
+        Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://cloudconvert.com/pdf-to-epub"));
+        startActivity(mIntent);
+    }
+    //https://cloudconvert.com/epub-to-pdf
+    public void convertButtonToPDF(View view){ // pdf to epub
+        Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://cloudconvert.com/epub-to-pdf"));
+        startActivity(mIntent);
     }
 
 }
