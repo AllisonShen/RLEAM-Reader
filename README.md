@@ -1,5 +1,5 @@
 # RLEAM-Reader
-RLEAM Reader: Reading, Learning, and Memorizing
+RLEAM Reader: Read, Learn, and Memorize
 
 ## Introduction
 RLEAM Reader is designed to build a seamless and immersive way for users to read, learn and memorize while reading ebook/documents which include complex vocabularies.
