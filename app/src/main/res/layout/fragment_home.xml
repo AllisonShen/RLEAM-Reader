@@ -19,6 +19,7 @@
             android:layout_height="80dp"
             android:gravity="center"
             android:text="PDF"
+            android:textColor="@color/yellow"
             android:textSize="40sp" />
 
         <Button
@@ -61,6 +62,7 @@
             android:layout_height="70dp"
             android:gravity="center"
             android:text="EPUB"
+            android:textColor="@color/yellow"
             android:textSize="40sp" />
 
         <Button

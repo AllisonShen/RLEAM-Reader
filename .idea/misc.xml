@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/pdftest_background.xml" value="0.18564102564102564" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/activity_read_view_epub.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.11005434782608696" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/pdftest.xml" value="0.18385416666666668" />

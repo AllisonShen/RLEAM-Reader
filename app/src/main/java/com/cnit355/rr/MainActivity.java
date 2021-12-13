@@ -40,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void viewDetailsPDF(View view){
+        Intent mIntent = new Intent(this, ReadViewEPUB.class);
+        startActivity(mIntent);
 
     }
     public void viewDetailsEPUB(View view){
-
+        Intent mIntent = new Intent(this, ReadViewEPUB.class);
+        startActivity(mIntent);
     }
     public void convertButton(View view){ // pdf to epub
         Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://cloudconvert.com/pdf-to-epub"));

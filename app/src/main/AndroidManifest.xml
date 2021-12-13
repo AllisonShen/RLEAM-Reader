@@ -4,18 +4,29 @@
 >
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rleamreader">
         <activity
+            android:name=".ReadViewEPUB"
+            android:exported="true" />
+
+        <activity
+
             android:name=".RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".Login"
             android:exported="true" />
+        <!--<<<<<<< Updated upstream-->
+<!--=======-->
+<!--            android:name=".ReadViewEPUB"-->
+<!--&gt;>>>>>> Stashed changes-->
+<!--            android:exported="true" />-->
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
