@@ -1,6 +1,8 @@
 package com.cnit355.rr;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GestureDetectorCompat;
 
@@ -11,7 +13,10 @@ import java.util.List;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.TOCReference;
 import nl.siegmann.epublib.epub.EpubReader;
+
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,7 +36,9 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     ImageView imageView;
     int index;
     private GestureDetectorCompat gDetector;
-//    private TextView output_text;
+    protected final int PERMISSION_REQUEST = 42;
+
+    //    private TextView output_text;
 //    output_text = (TextView) findViewById(R.id.outputText);
     String output_text;
 
@@ -39,6 +46,10 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_view_epub);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
+        }
 
         Log.i("epublib", "author(s): " + "here is read view");
         index = 0;
@@ -51,7 +62,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
         try {
             // find InputStream for book
             InputStream epubInputStream = assetManager
-                    .open("books/paper.epub");
+                    .open("paper.epub");
 
             // Load Book from inputStream
             Book book = (new EpubReader()).readEpub(epubInputStream);
@@ -63,10 +74,10 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
             Log.i("epublib", "title: " + book.getTitle());
 
             // Log the book's coverimage property
-            Bitmap coverImage = BitmapFactory.decodeStream(book.getCoverImage()
-                    .getInputStream());
-            Log.i("epublib", "Coverimage is " + coverImage.getWidth() + " by "
-                    + coverImage.getHeight() + " pixels");
+//            Bitmap coverImage = BitmapFactory.decodeStream(book.getCoverImage()
+//                    .getInputStream());
+//            Log.i("epublib", "Coverimage is " + coverImage.getWidth() + " by "
+//                    + coverImage.getHeight() + " pixels");
 
             // Log the tale of contents
             logTableOfContents(book.getTableOfContents().getTocReferences(), 0);
