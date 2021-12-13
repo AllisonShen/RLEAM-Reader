@@ -1,7 +1,6 @@
 # RLEAM-Reader
 RLEAM Reader: Read, Learn, and Memorize
 
-=======
 ## Introduction
 RLEAM Reader is designed to build a seamless and immersive way for users to read, learn and memorize while reading ebook/documents which include complex vocabularies.
 
@@ -12,12 +11,18 @@ Reading is implemented with the read view, which integrates hand gestures like t
 * Test Emulator: Pixel
 * Android 11.0
 
+
 ## External Libraries
 * epublib-core-latest.jar(https://github.com/psiegman/epublib)
 * slf4j-android-1.7.32.jar(http://www.slf4j.org/download.html)
 * slf4j-api-1.7.32.jar(http://www.slf4j.org/download.html)
 * jsoup-1.14.3.jar(https://jsoup.org/download): for reading HTML files from EPUB files
 
+## Techniques
+* UI: Fragment, WebView
+* Database: SQLite
+* Intent
+* Gesture
 
 ## Useful Links
  - [Good README Files](https://courses.cs.washington.edu/courses/cse326/02wi/homework/hw5/good-readmes.html)
