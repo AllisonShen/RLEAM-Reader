@@ -1,4 +1,4 @@
 # RLEAM-Reader
-RLEAM Reader: Reading, Learning, and Memorizing
+RLEAM Reader: Read, Learn, and Memorize
 
 API 30
