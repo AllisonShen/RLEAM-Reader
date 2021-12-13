@@ -28,8 +28,15 @@ public class DashboardFragment extends Fragment {
     private Button mKnowButton;
     private Button mForgetButton;
     private Button mNextButton;
+    private Button mForgettingCurveButton;
     private TextView mWordTextView;
     private TextView mMeaningTextView;
+    private TextView mRememberTextView;
+    private TextView mForgetTextView;
+    private TextView mForgettingCurveTextView;
+    private int[] rememberCount = new int[4] ;
+    private int[] forgetCount = new int[4];
+    private int[] forgettingTime = new int[4];
 
     //create the question bank
     private QuestionsModel[] mQuestionBank = new QuestionsModel[]{
@@ -62,6 +69,9 @@ public class DashboardFragment extends Fragment {
 
         mMeaningTextView = binding.explanation;
         mWordTextView = binding.word;
+        mRememberTextView = binding.rememberCount;
+        mForgetTextView = binding.forgetCount;
+        mForgettingCurveTextView = binding.forgettingCurveTextView;
         mWordTextView.setText(mQuestionBank[mCurrentIndex].getTextId());
 
         mExplanationButton = binding.meaning;
@@ -96,6 +106,14 @@ public class DashboardFragment extends Fragment {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        mForgettingCurveButton = binding.forgettingCurveButton;
+        mForgettingCurveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                calculateForgettingCurve();
             }
         });
 
@@ -145,6 +163,9 @@ public class DashboardFragment extends Fragment {
         int word = mQuestionBank[mCurrentIndex].getTextId();
         mWordTextView.setText(word);
         mMeaningTextView.setText("Explanation");
+        mRememberTextView.setText("Remember: " + rememberCount[mCurrentIndex]);
+        mForgetTextView.setText("Forget: " + forgetCount[mCurrentIndex]);
+        mForgettingCurveTextView.setText("Forgetting Curve");
     }
 
 
@@ -154,8 +175,14 @@ public class DashboardFragment extends Fragment {
         int messageResID = 0;
         if (userPress == answerTrue){
             messageResID = R.string.remember_toast;
+            rememberCount[mCurrentIndex] ++;
+            mRememberTextView.setText("Remember: " + rememberCount[mCurrentIndex]);
+
+
         }else {
             messageResID = R.string.forget_toast;
+            forgetCount[mCurrentIndex] ++;
+            mForgetTextView.setText("Forget: " + forgetCount[mCurrentIndex]);
         }
         Toast.makeText(getActivity().getApplicationContext(), messageResID, Toast.LENGTH_SHORT).show();
     }
@@ -166,5 +193,14 @@ public class DashboardFragment extends Fragment {
         mMeaningTextView.setText(meaning);
     }
 
+
+    public void calculateForgettingCurve(){
+        if (rememberCount[mCurrentIndex] != 0 || forgetCount[mCurrentIndex] != 0) {
+            double probability =Math.round((double)rememberCount[mCurrentIndex] / (rememberCount[mCurrentIndex] + forgetCount[mCurrentIndex]) * 100) ;
+            mForgettingCurveTextView.setText("The probability for retrieving this word is " + probability + " %");
+        }else{
+            mForgettingCurveTextView.setText("No record for calculation");
+        }
+    }
 
 }
