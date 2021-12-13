@@ -1,7 +1,6 @@
 # RLEAM-Reader
 RLEAM Reader: Reading, Learning, and Memorizing
 
-<<<<<<< Updated upstream
 API 30
 =======
 ## Introduction
