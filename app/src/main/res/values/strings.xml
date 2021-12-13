@@ -11,6 +11,20 @@
     <string name="enter_user">Enter your username:</string>
     <string name="create_password">Create your password: </string>
     <string name="create_user">Create your username:</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="remember_toast">Remember</string>
+    <string name="forget_toast">Forget</string>
+    <string name="next_button">Next</string>
+    <string name="meaning_scrupulous">The meaning of scrupulous is diligent, thorough, and extremely attentive to details </string>
+    <string name="meaning_vilify">The meaning of vilify is speak or write about in an abusively disparaging manner</string>
+    <string name="meaning_sanctimonious">excessively or hypocritically pious</string>
+    <string name="meaning_turpitude">a corrupt or depraved or degenerate act or practice</string>
+    <string name="word_scrupulous">Scrupulous</string>
+    <string name="word_vilify">Vilify</string>
+    <string name="word_sanctimonious">Sanctimonious</string>
+    <string name="word_turpitude">Turpitude</string>
+
 
 
 

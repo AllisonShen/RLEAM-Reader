@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-//code for helper class/login/register: https://www.learnandroid.net/2020/05/login-and-register-activity-using.html
+
 //Class to handle database functions
 
 public class DBHelper extends SQLiteOpenHelper {
