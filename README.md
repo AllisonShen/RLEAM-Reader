@@ -27,4 +27,3 @@ Reading is implemented with the read view, which integrates hand gestures like t
  - [Android studio logcat nothing to show](https://stackoverflow.com/questions/17432358/android-studio-logcat-nothing-to-show)
  - [Android Studio Run/Debug configuration error: Module not specified](https://stackoverflow.com/questions/29087882/android-studio-run-debug-configuration-error-module-not-specified)
  - [Type BuildConfig is defined multiple times](https://stackoverflow.com/questions/60507686/type-buildconfig-is-defined-multiple-times)
->>>>>>> Stashed changes
