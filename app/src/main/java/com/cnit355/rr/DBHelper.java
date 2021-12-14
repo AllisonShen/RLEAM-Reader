@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+//code for helper class/login/register: https://www.learnandroid.net/2020/05/login-and-register-activity-using.html
+//code for cursor querying: https://www.geeksforgeeks.org/how-to-read-data-from-sqlite-database-in-android/
 //Class to handle database functions
 
 public class DBHelper extends SQLiteOpenHelper {
