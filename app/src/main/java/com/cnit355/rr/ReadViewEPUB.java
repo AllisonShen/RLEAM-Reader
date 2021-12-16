@@ -16,8 +16,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -36,6 +39,8 @@ import nl.siegmann.epublib.epub.EpubReader;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,6 +48,8 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.TextPaint;
@@ -50,10 +57,19 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.view.GestureDetector;
@@ -61,25 +77,34 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
+import javax.net.ssl.HttpsURLConnection;
+//implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
+
+
+public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
     ImageView imageView;
     int index;
     private GestureDetectorCompat gDetector;
     protected final int PERMISSION_REQUEST = 42;
-//    private ResultProfileBinding binding;
+    //    private ResultProfileBinding binding;
     private static final String TAG = "ReadViewEPUB";
 
-//    private MyAdatper mAdatper;
+    //    private MyAdatper mAdatper;
     private RecyclerView mRecycler;
     private Book book;
-    private WebView mWebView;
+    static Thread threadCheckDict;
+    //        View view = binding.getRoot();
+//        setContentView(view);
+//        recycler
+//        mRecycler = (RecyclerView) findViewById(R.id.recycler);
+    public static WebView mWebView;
 
     public String title;
     public String href;
     private List<String> indexTitleList = new ArrayList<>();
     private List<String> indexHrefList = new ArrayList<>();
-
-
+    WebSettings settings;
+    static String selectedWord = "nothing";
 
 
     //    private TextView output_text;
@@ -90,14 +115,8 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_view_epub);
-//        View view = binding.getRoot();
-//        setContentView(view);
-//        recycler
-//        mRecycler = (RecyclerView) findViewById(R.id.recycler);
         mWebView = (WebView) findViewById(R.id.mWebView);
-//        mRecycler.setLayoutManager(new LinearLayoutManager(this));
-//        mAdatper = new MyAdatper(indexTitleList,indexHrefList, this);
-//        mRecycler.setAdapter(mAdatper);
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
@@ -106,7 +125,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
         Log.i("epublib", "author(s): " + "here is read view");
         index = 0;
 
-        gDetector = new GestureDetectorCompat(this,this);
+        gDetector = new GestureDetectorCompat(this, this);
         gDetector.setOnDoubleTapListener(this);
 
 
@@ -117,7 +136,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
                     .open("paper.epub");
 
             // Load Book from inputStream
-             book = (new EpubReader()).readEpub(epubInputStream);
+            book = (new EpubReader()).readEpub(epubInputStream);
 
             // Log the book's authors
             Log.i("epublib", "author(s): " + book.getMetadata().getAuthors());
@@ -143,7 +162,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
             //Find chapters
             Spine spine = book.getSpine();
             List<SpineReference> spineReferences = spine.getSpineReferences();
-            if (spineReferences != null && spineReferences.size() > 0){
+            if (spineReferences != null && spineReferences.size() > 0) {
                 Resource resource = spineReferences.get(1).getResource(); // get html pages
                 Log.i(TAG, "initView: book=" + resource.getId() + "  " + resource.getTitle() + "  " + resource.getSize() + " ");
                 //for debug
@@ -153,122 +172,72 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
                 mWebView.getSettings().setJavaScriptEnabled(true);
                 mWebView.loadDataWithBaseURL(null, strHtml, "text/html", "utf-8", null);
 //                parseHtmlData(strHtml);
+                mWebView.evaluateJavascript("(function(){return window.getSelection().toString()})()",
+                        new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                Log.v(TAG, "Webview selected text: " + value);
+                                selectedWord = value;
+                            }
+                        });
 
-            }else {
+
+            } else {
                 Log.i(TAG, "initView: spineReferences is null");
             }
         } catch (IOException e) {
             Log.e("epublib", e.getMessage());
         }
-    }
-
-    private void parseHtmlData(String strHtml) throws IOException {
-
-
-
-        Document doc = Jsoup.parse(strHtml);
-        Log.i(TAG, "parseHtmlData:  doc.title();=" + doc.title());
-        Elements eles = doc.getElementsByTag("a");   // interate find "a" attribute
-        for (Element link : eles) {
-            String linkHref = link.attr("href"); //inter
-            String text = link.text();
-            href = linkHref;
-            title = text;
-            indexTitleList.add(title);
-            indexHrefList.add(href);
-            Log.i(TAG, "parseHtmlData: linkHref=" + linkHref + " text=" + text);
-        }
-    }
-    private void init() {
-        String definition = "Clickable words in text view ".trim();
-        TextView definitionView = (TextView) findViewById(R.id.text);
-        definitionView.setMovementMethod(LinkMovementMethod.getInstance());
-        definitionView.setText(definition, TextView.BufferType.SPANNABLE);
-        Spannable spans = (Spannable) definitionView.getText();
-        BreakIterator iterator = BreakIterator.getWordInstance(Locale.US);
-        iterator.setText(definition);
-        int start = iterator.first();
-        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator
-                .next()) {
-            String possibleWord = definition.substring(start, end);
-            if (Character.isLetterOrDigit(possibleWord.charAt(0))) {
-                ClickableSpan clickSpan = getClickableSpan(possibleWord);
-                spans.setSpan(clickSpan, start, end,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-        }
-    }
-    private ClickableSpan getClickableSpan(final String word) {
-        return new ClickableSpan() {
-            final String mWord;
-            {
-                mWord = word;
-            }
+        threadCheckDict = new Thread(new Runnable() {
+            String strMean;
 
             @Override
-            public void onClick(View widget) {
-                Log.d("tapped on:", mWord);
-                Toast.makeText(widget.getContext(), mWord, Toast.LENGTH_SHORT)
-                        .show();
+            public void run() {
+                try {
+                    //Your code goes here
+                    strMean = checkDict(selectedWord);
+                    Log.v(TAG, "Webview meaning: " + strMean);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        });
 
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-            }
-        };
     }
-//    private class MyAdatper extends RecyclerView.Adapter<MyAdatper.ViewHolder>{
-//        private List<String> mStrings;
-//        private List<String> mHref;
-//        private final LayoutInflater mInflater;
-//
-//        public MyAdatper(List<String> mStrings,List<String> mHref, Context context) {// title, hrefs
-//            this.mStrings = mStrings;
-//            this.mHref = mHref;
-//            mInflater = LayoutInflater.from(context);
-//        }
-//        public class ViewHolder extends RecyclerView.ViewHolder {
-////            TextView mTextView;
-//
-//            public ViewHolder(View itemView) {
-//                super(itemView);
-////                mTextView = (TextView) itemView.findViewById(R.id.book_title);
-//            }
-//        }
-//
-//        @NonNull
-//        @Override
-//        public MyAdatper.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            return null;
-////            View view = mInflater.inflate(R.layout.layout_item, null);
-////            ViewHolder holder = new ViewHolder(view);
-////            return holder;
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull MyAdatper.ViewHolder holder, int position) {
-////            return null;
-//
-//
-////            holder.mTextView.setText(mStrings.get(position));//title
-////            holder.mTextView.setOnClickListener(new View.OnClickListener() {
-////                @Override
-////                public void onClick(View v) {
-////                    String href = mHref.get(position);
-////                    Intent intent = new Intent(ReadViewEPUB.this, DetailActivity.class);
-////                    intent.putExtra("href", href);
-////                    startActivity(intent);
-////                }
-////            });
-//
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return 0;
-////            return mStrings.size();
-//        }
-//    }
+
+    private String checkDict(String selectedWord) {
+        String returnValue = "None";
+        final String language = "en-gb";
+        String word = selectedWord;
+        final String fields = "pronunciations";
+        final String strictMatch = "false";
+        final String word_id = word.toLowerCase();
+        final String restUrl = "https://od-api.oxforddictionaries.com:443/api/v2/entries/" + language + "/" + word_id + "?" + "fields=" + fields + "&strictMatch=" + strictMatch;
+        //TODO: replace with your own app id and app key
+        final String app_id = "0a267e15";
+        final String app_key = "084035680d7a9925713be9abd914977a";
+        try {
+            URL url = new URL(restUrl);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.setRequestProperty("app_id", app_id);
+            urlConnection.setRequestProperty("app_key", app_key);
+
+            // read the output from the server
+            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+            System.out.println(stringBuilder.toString());
+            returnValue = stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+return returnValue;
+    }
 
     private void logTableOfContents(List<TOCReference> tocReferences, int depth) {
         if (tocReferences == null) {
@@ -286,7 +255,8 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
             logTableOfContents(tocReference.getChildren(), depth + 1);
         }
     }
-    public  String bytes2Hex(byte[] bs) {
+
+    public String bytes2Hex(byte[] bs) {
         if (bs == null || bs.length <= 0) {
             return null;
         }
@@ -300,13 +270,20 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        Toast.makeText(ReadViewEPUB.this, "Single Tap: Show Explanation",
-                Toast.LENGTH_LONG).show();
         return false;
     }
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
+        mWebView.evaluateJavascript("(function(){return window.getSelection().toString()})()",
+                new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.v(TAG, "Webview selected text: " + value);
+                        selectedWord = value;
+                    }
+                });
+
         return false;
     }
 
@@ -337,21 +314,111 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-        Toast.makeText(ReadViewEPUB.this, "Add to Favorite List",
-                Toast.LENGTH_LONG).show();
+        mWebView.evaluateJavascript("(function(){return window.getSelection().toString()})()",
+                new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.v(TAG, "Webview selected text: " + value);
+                        selectedWord = value;
+                    }
+                });
+
     }
+
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.gDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
 // Be sure to call the superclass implementation return super.onTouchEvent(event);
+
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        super.onActionModeStarted(mode);
+
+        MenuInflater menuInflater = mode.getMenuInflater();
+        Menu menu = mode.getMenu();
+
+        menu.clear();
+        menuInflater.inflate(R.menu.long_press_menu, menu);
+
+
+        menu.findItem(R.id.dictionary).setOnMenuItemClickListener(new ToastMenuItemListener(this, mode, "Dictionary"));
+        menu.findItem(R.id.favoriteList).setOnMenuItemClickListener(new ToastMenuItemListener(this, mode, "Favorite List"));
+//        menu.findItem(R.id.custom_three).setOnMenuItemClickListener(new ToastMenuItemListener(this, mode, "Three!"));
+    }
+//    private void emulateShiftHeld(WebView view)
+//    {
+//        try
+//        {
+//            KeyEvent shiftPressEvent = new KeyEvent(0, 0, KeyEvent.ACTION_DOWN,
+//                    KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0);
+//            shiftPressEvent.dispatch(view);
+//            Toast.makeText(this, "select_text_now", Toast.LENGTH_SHORT).show();
+//        }
+//        catch (Exception e)
+//        {
+//            Log.e("dd", "Exception in emulateShiftHeld()", e);
+//        }
+//    }
+
+
+    private static class ToastMenuItemListener implements MenuItem.OnMenuItemClickListener {
+
+        private final Context context;
+        private final ActionMode actionMode;
+        private final String text;
+
+
+        private ToastMenuItemListener(Context context, ActionMode actionMode, String text) {
+            this.context = context;
+            this.actionMode = actionMode;
+            this.text = text;
+        }
+
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+            System.out.println("menuItemClicked");
+            Log.v(TAG, "Webview selected text: " + selectedWord);
+            String strMean;
+            mWebView.evaluateJavascript("(function(){return window.getSelection().toString()})()",
+                    new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String value) {
+                            Log.v(TAG, "Webview selected text: " + value);
+                            selectedWord = value;
+                        }
+                    });
+
+
+            switch (item.getItemId()) {
+                case R.id.dictionary:
+                    Log.v(TAG, "Webview selected text: " + selectedWord);
+                    threadCheckDict.start();
+//                    testWV.searchInDict();
+//                    if (mActionMode!=null){
+//                        mActionMode.finish();
+//                    }
+
+                    break;
+                case R.id.favoriteList:
+//                    testWV.highlightWord();
+                    break;
+            }
+            actionMode.finish();
+            return true;
+        }
     }
 }
+
 
 
 
