@@ -3,6 +3,8 @@ package com.cnit355.rr;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,6 +20,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cnit355.rr.databinding.ActivityMainBinding;
+
+//code for menu items: https://www.journaldev.com/9357/android-actionbar-example-tutorial
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +49,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.navigation_favList:
+                Toast.makeText(this, "Selected favourite list", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_forgetCurve:
+                Toast.makeText(this, "Selected forgetting curve", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_signout:
+                Intent mIntent = new Intent(this, Login.class);
+                startActivity(mIntent);
+                Login.currentUser="";
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void viewDetailsPDF(View view){
         Intent mIntent = new Intent(this, ReadViewEPUB.class);

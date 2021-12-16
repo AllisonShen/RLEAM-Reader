@@ -90,7 +90,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //to use: create  DBHelper db = new DBHelper(this); as global variable
-    // Boolean insertWord = db.insertFavouriteWord(username, word);
+    // Boolean insertWord = db.insertFavouriteWord(Login.currentUser, word);
     //            if(insertWord==true){
     //                Toast.makeText(this, "Favourite word saved!", Toast.LENGTH_SHORT).show();
     //            }else{

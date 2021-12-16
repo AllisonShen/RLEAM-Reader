@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_favList"
+        android:title="@string/favourite_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/navigation_forgetCurve"
+        android:title="@string/forgetting_curve"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/navigation_signout"
+        android:icon="@drawable/mem"
+        android:title="@string/sign_out"
+        app:showAsAction="never"/>
+</menu>

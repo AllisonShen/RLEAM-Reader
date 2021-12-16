@@ -22,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
         user=findViewById(R.id.editTextUserName);
         password=findViewById(R.id.editTextPassword);
         db = new DBHelper(this); //create database
+
     }
 
     public void onRegisterClicked(View view) {

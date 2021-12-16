@@ -24,8 +24,9 @@
     <string name="word_vilify">Vilify</string>
     <string name="word_sanctimonious">Sanctimonious</string>
     <string name="word_turpitude">Turpitude</string>
-
-
+    <string name="forgetting_curve">Forgetting Curve</string>
+    <string name="sign_out">Sign out</string>
+    <string name="favourite_list">Favourite list</string>
 
 
 </resources>
