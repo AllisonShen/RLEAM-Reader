@@ -19,9 +19,10 @@ Reading is implemented with the read view, which integrates hand gestures like t
 * jsoup-1.14.3.jar(https://jsoup.org/download): for reading HTML files from EPUB files
 
 ## Techniques
-* UI: Fragment, WebView
+* UI: Fragment, WebView, MenuInflater
 * Database: SQLite
 * Intent
+* Thread: In android calling network requests on the main thread forbidden by default
 * Gesture
 
 ## Useful Links

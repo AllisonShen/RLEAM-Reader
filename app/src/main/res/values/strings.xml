@@ -26,7 +26,8 @@
     <string name="word_turpitude">Turpitude</string>
     <string name="forgetting_curve">Forgetting Curve</string>
     <string name="sign_out">Sign out</string>
-    <string name="favourite_list">Favourite list</string>
+    <string name="favourite_list">Favorite List</string>
+    <string name="dictionary">Dictionary</string>
 
 
 </resources>
