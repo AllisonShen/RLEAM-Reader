@@ -27,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-
+    DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db= new DBHelper(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -60,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.navigation_favList:
-                Toast.makeText(this, "Selected favourite list", Toast.LENGTH_SHORT).show();
+                Intent favList = new Intent(this, FavouriteList.class);
+                startActivity(favList);
                 return true;
             case R.id.navigation_forgetCurve:
                 Toast.makeText(this, "Selected forgetting curve", Toast.LENGTH_SHORT).show();
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.navigation_signout:
                 Intent mIntent = new Intent(this, Login.class);
                 startActivity(mIntent);
-                Login.currentUser="";
+                db.closeDB(); //close database
                 return true;
         }
         return super.onOptionsItemSelected(item);

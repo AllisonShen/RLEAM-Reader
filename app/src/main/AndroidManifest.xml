@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cnit355.rr"
->
+    package="com.cnit355.rr">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,35 +13,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rleamreader">
         <activity
+            android:name=".FavouriteList"
+            android:exported="true" />
+        <activity
             android:name=".ReadViewEPUB"
             android:exported="true" />
-
         <activity
-
             android:name=".RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".Login"
             android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-        <!--<<<<<<< Updated upstream-->
-<!--=======-->
-<!--            android:name=".ReadViewEPUB"-->
-<!--&gt;>>>>>> Stashed changes-->
-<!--            android:exported="true" />-->
-
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- <<<<<<< Updated upstream -->
+        <!-- ======= -->
+        <!-- android:name=".ReadViewEPUB" -->
+        <!-- &gt;>>>>>> Stashed changes -->
+        <!-- android:exported="true" /> -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"/>
-
-
+            android:label="@string/app_name" />
     </application>
 
 </manifest>
