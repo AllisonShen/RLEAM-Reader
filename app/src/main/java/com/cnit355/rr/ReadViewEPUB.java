@@ -297,27 +297,6 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
         return cBuf.toString();
     }
 
-    public void clickPrevious(View view){
-//        imageView = (ImageView) findViewById(R.id.imageView);
-//        long id_d = imageView.getUniqueDrawingId();
-//        String tempStr = "_1";
-//        int[] ids = {R.drawable._1, R.drawable._2, R.drawable._3, R.drawable._4, R.drawable._5, R.drawable._6};
-//        index = (index - 1 +6)%6;
-//        Drawable myDrawable = ResourcesCompat.getDrawable(getResources(), ids[index],
-//                null);
-////        srcCompat
-//        imageView.setImageDrawable(myDrawable);
-
-    }
-    public void clickNext(View view){
-//        imageView = (ImageView) findViewById(R.id.imageView);
-//        int[] ids = {R.drawable._1, R.drawable._2, R.drawable._3, R.drawable._4, R.drawable._5, R.drawable._6};
-//        index = (index + 1 +6)%6;
-//        Drawable myDrawable = ResourcesCompat.getDrawable(getResources(), ids[index],
-//                null);
-//        imageView.setImageDrawable(myDrawable);
-
-    }
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
