@@ -28,6 +28,7 @@
     <string name="sign_out">Sign out</string>
     <string name="favourite_list">Favorite List</string>
     <string name="dictionary">Dictionary</string>
+    <string name="close">Close</string>
 
 
 </resources>
