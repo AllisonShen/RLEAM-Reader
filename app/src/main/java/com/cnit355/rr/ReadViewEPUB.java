@@ -590,7 +590,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
 
 //                    to use: create
 
-                     Boolean insertWord = db.insertFavouriteWord(Login.currentUser, selectedWord, strMean);
+                     Boolean insertWord = db.insertFavouriteWord(Login.currentUser, selectedWord, strMean, "0", "0");
                     if(insertWord==true){
                         Toast.makeText(this.context, "Favourite word saved!", Toast.LENGTH_SHORT).show();
                     }else{

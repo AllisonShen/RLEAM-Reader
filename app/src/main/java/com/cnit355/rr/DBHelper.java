@@ -18,13 +18,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "UserLogin.db"; //name database
 
     public DBHelper(Context context) {
-        super(context, "UserLogin.db", null, 2);
+        super(context, "UserLogin.db", null, 3);
     }
 
     @Override
     public void onCreate(SQLiteDatabase DB) {
         DB.execSQL("create Table if not exists users(username TEXT primary key, password TEXT)"); //Create table users with primary key username and password field
-        DB.execSQL("create Table if not exists favourites(username TEXT, word TEXT, explanation TEXT, FOREIGN KEY (username)\n" +
+        DB.execSQL("create Table if not exists favourites(username TEXT, word TEXT, explanation TEXT, remember TEXT, forget TEXT, FOREIGN KEY (username)\n" +
                 "    REFERENCES users (username), primary key (username, word) )");
     }
 
@@ -84,7 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //adding a user's favourite words to the database
 
-    public boolean insertFavouriteWord(String username, String word, String explanation) {
+    public boolean insertFavouriteWord(String username, String word, String explanation, String remember, String forget) {
 
         SQLiteDatabase LoginDB = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -94,6 +94,8 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("username", username);
         values.put("word", word);
         values.put("explanation", explanation);
+        values.put("remember", remember);
+        values.put("forget", forget);
 
         // after adding all values we are passing
         // content values to our table.
@@ -122,6 +124,21 @@ public class DBHelper extends SQLiteOpenHelper {
     //                Toast.makeText(this, "Could not save favourite word", Toast.LENGTH_SHORT).show();
     //            }
 
+    public void updateRemember(String username, String word, String remember) {
+
+        SQLiteDatabase DB = this.getWritableDatabase();
+
+        //update remember count for a specific word
+        DB.execSQL("Update favourites set remember=? where username=? and word=?", new String[] {remember,username, word});
+    }
+
+    public void updateForget(String username, String word, String forget) {
+
+        SQLiteDatabase DB = this.getWritableDatabase();
+
+        //update forget for a specific word
+        DB.execSQL("Update favourites set forget=? where username=? and word=?", new String[] {forget,username, word});
+    }
     //method to see a users favourite words, returns array of the words
     public ArrayList<String> favouriteWords(String username) {
 
@@ -167,10 +184,51 @@ public class DBHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             // moving our cursor to next.
         }
-        // at last closing our cursor
         // and returning our array list.
         cursor.close();
         return favouriteWordExplanation;
+    }
+
+    public String rememberCount(String username, String word) {
+
+        SQLiteDatabase LoginDB = this.getReadableDatabase();
+        // on below line we are creating a cursor with query to read data from database.
+        Cursor cursor = LoginDB.rawQuery("Select remember from favourites where username = ? and word= ?", new String[] {username, word});
+
+        // on below line we are creating a string to store remember count.
+        String rememberCount = "";
+
+        // moving our cursor to first position.
+        if (cursor.moveToFirst()) {
+            do {
+                // on below line we are adding the data from cursor to our string.
+                rememberCount=((cursor.getString(cursor.getColumnIndexOrThrow("remember"))));
+            } while (cursor.moveToNext());
+        }
+        // and returning our string.
+        cursor.close();
+        return rememberCount;
+    }
+
+    public String forgetCount(String username, String word) {
+
+        SQLiteDatabase LoginDB = this.getReadableDatabase();
+        // on below line we are creating a cursor with query to read data from database.
+        Cursor cursor = LoginDB.rawQuery("Select forget from favourites where username = ? and word= ?", new String[] {username, word});
+
+        // on below line we are creating a string to store forget count.
+        String forgetCount = "";
+
+        // moving our cursor to first position.
+        if (cursor.moveToFirst()) {
+            do {
+                // on below line we are adding the data from cursor to our string.
+                forgetCount=((cursor.getString(cursor.getColumnIndexOrThrow("forget"))));
+            } while (cursor.moveToNext());
+        }
+        // and returning our string.
+        cursor.close();
+        return forgetCount;
     }
 
     public void closeDB() {

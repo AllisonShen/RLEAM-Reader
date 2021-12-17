@@ -25,7 +25,7 @@ public class FavouriteList extends AppCompatActivity {
         if (!db.favouriteWords(Login.currentUser).isEmpty()){
             try{
 
-                ArrayList <String> words = db.favouriteWords(Login.currentUser); //db fav words has [hi, scrupulous]
+                ArrayList <String> words = db.favouriteWords(Login.currentUser);
                 ArrayList <String> explanations= db.favouriteWordExplanations(Login.currentUser);
 
                 TextView list= findViewById(R.id.textViewList);

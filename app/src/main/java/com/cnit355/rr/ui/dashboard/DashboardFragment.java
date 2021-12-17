@@ -1,6 +1,7 @@
 package com.cnit355.rr.ui.dashboard;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.cnit355.rr.DBHelper;
+import com.cnit355.rr.Login;
 import com.cnit355.rr.QuestionsModel;
 import com.cnit355.rr.R;
 import com.cnit355.rr.databinding.FragmentDashboardBinding;
+
+import java.util.ArrayList;
 
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
+
+    DBHelper db;
+    String user=Login.currentUser;
 
     //create buttons and textview for UI
     private Button mExplanationButton;
@@ -34,17 +42,10 @@ public class DashboardFragment extends Fragment {
     private TextView mRememberTextView;
     private TextView mForgetTextView;
     private TextView mForgettingCurveTextView;
-    private int[] rememberCount = new int[4] ;
-    private int[] forgetCount = new int[4];
-    private int[] forgettingTime = new int[4];
+    private int[] rememberCount = new int[20] ;
+    private int[] forgetCount = new int[20];
+    private int[] forgettingTime = new int[20];
 
-    //create the question bank
-    private QuestionsModel[] mQuestionBank = new QuestionsModel[]{
-            new QuestionsModel(R.string.word_scrupulous, R.string.meaning_scrupulous, true),
-            new QuestionsModel(R.string.word_vilify, R.string.meaning_vilify, true),
-            new QuestionsModel(R.string.word_sanctimonious, R.string.meaning_sanctimonious, true),
-            new QuestionsModel(R.string.word_turpitude, R.string.meaning_turpitude, true)
-    };
     private int mCurrentIndex = 0;
 
 
@@ -56,6 +57,7 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        db=new DBHelper(getContext());
        /*
        final TextView textView = binding.textDashboard;
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -72,9 +74,26 @@ public class DashboardFragment extends Fragment {
         mRememberTextView = binding.rememberCount;
         mForgetTextView = binding.forgetCount;
         mForgettingCurveTextView = binding.forgettingCurveTextView;
-        mWordTextView.setText(mQuestionBank[mCurrentIndex].getTextId());
+
+
+        if (!db.favouriteWords(user).isEmpty()){
+            try{
+            mWordTextView.setText(db.favouriteWords(user).get(mCurrentIndex));
+            mMeaningTextView.setText("Explanation");
+            mRememberTextView.setText("Remember: " + db.rememberCount(user, db.favouriteWords(user).get(mCurrentIndex))); //read from dbdb.rememberCount(user, word).get(mCurrentIndex)
+                mForgetTextView.setText("Forget: " + db.forgetCount(user, db.favouriteWords(user).get(mCurrentIndex)));
+                mForgettingCurveTextView.setText("Forgetting Curve");
+
+                }catch (Exception e){
+
+            }
+
+        }
+
+
 
         mExplanationButton = binding.meaning;
+
         mExplanationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,15 +107,35 @@ public class DashboardFragment extends Fragment {
         mKnowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkAnswer(true);
-            }
+                    try{
+
+                        int count=Integer.parseInt(db.rememberCount(user, db.favouriteWords(user).get(mCurrentIndex)));
+                        count++;
+
+                        mRememberTextView.setText("Remember: " + count);
+                       // rememberCount[mCurrentIndex]= count;
+                        //insert new rememberCount for specific user and word combination
+                        db.updateRemember(user, db.favouriteWords(user).get(mCurrentIndex), Integer.toString(count));
+
+                    }catch (Exception e){
+                    }
+        }
         });
 
         mForgetButton = binding.forget;
         mForgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkAnswer(false);
+                try{
+                    int count=Integer.parseInt(db.forgetCount(user, db.favouriteWords(user).get(mCurrentIndex)));
+                    count++;
+
+                    mForgetTextView.setText("Forget: " + count);
+                    //forgetCount[mCurrentIndex]= count;
+                    //insert new forgetCount for specific user and word combination
+                    db.updateForget(user, db.favouriteWords(user).get(mCurrentIndex), Integer.toString(count));
+                }catch (Exception e){
+                }
             }
         });
 
@@ -104,8 +143,12 @@ public class DashboardFragment extends Fragment {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updateQuestion();
+                //mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+
+                try {
+                    mCurrentIndex = (mCurrentIndex + 1) % db.favouriteWords(user).size();
+                    updateQuestion();
+                }catch (Exception e){}
             }
         });
 
@@ -160,46 +203,46 @@ public class DashboardFragment extends Fragment {
     }
 
     public void updateQuestion(){
-        int word = mQuestionBank[mCurrentIndex].getTextId();
-        mWordTextView.setText(word);
-        mMeaningTextView.setText("Explanation");
-        mRememberTextView.setText("Remember: " + rememberCount[mCurrentIndex]);
-        mForgetTextView.setText("Forget: " + forgetCount[mCurrentIndex]);
-        mForgettingCurveTextView.setText("Forgetting Curve");
+        //int word = mQuestionBank[mCurrentIndex].getTextId();
+
+        if (!db.favouriteWords(user).isEmpty()){
+            try{
+                String word = db.favouriteWords(user).get(mCurrentIndex); //word from db
+                mWordTextView.setText(word);
+                mMeaningTextView.setText("Explanation");
+                mRememberTextView.setText("Remember: " + db.rememberCount(user, db.favouriteWords(user).get(mCurrentIndex))); //read from db
+                mForgetTextView.setText("Forget: " + db.forgetCount(user, db.favouriteWords(user).get(mCurrentIndex))); //from db
+                mForgettingCurveTextView.setText("Forgetting Curve");
+
+            }catch (Exception e){
+
+            }
+           }
     }
-
-
-
-    private void checkAnswer(boolean userPress){
-        boolean answerTrue = mQuestionBank[mCurrentIndex].isAnswer();
-        int messageResID = 0;
-        if (userPress == answerTrue){
-            messageResID = R.string.remember_toast;
-            rememberCount[mCurrentIndex] ++;
-            mRememberTextView.setText("Remember: " + rememberCount[mCurrentIndex]);
-
-
-        }else {
-            messageResID = R.string.forget_toast;
-            forgetCount[mCurrentIndex] ++;
-            mForgetTextView.setText("Forget: " + forgetCount[mCurrentIndex]);
-        }
-        Toast.makeText(getActivity().getApplicationContext(), messageResID, Toast.LENGTH_SHORT).show();
-    }
-
 
     public void displayMeaning(){
-        int meaning = mQuestionBank[mCurrentIndex].getTextMeaning();
-        mMeaningTextView.setText(meaning);
+        try {
+            String meaning= db.favouriteWordExplanations(user).get(mCurrentIndex);
+            mMeaningTextView.setText(meaning);
+        }catch (Exception e){}
+
     }
 
 
     public void calculateForgettingCurve(){
+
+        try{
+            rememberCount[mCurrentIndex]= Integer.parseInt(db.rememberCount(user, db.favouriteWords(user).get(mCurrentIndex)));
+            forgetCount[mCurrentIndex]= Integer.parseInt(db.forgetCount(user, db.favouriteWords(user).get(mCurrentIndex)));
+        }catch (Exception e){
+            Log.d("exception:", String.valueOf(e));
+        }
+
         if (rememberCount[mCurrentIndex] != 0 || forgetCount[mCurrentIndex] != 0) {
             double probability =Math.round((double)rememberCount[mCurrentIndex] / (rememberCount[mCurrentIndex] + forgetCount[mCurrentIndex]) * 100) ;
             mForgettingCurveTextView.setText("The probability for retrieving this word is " + probability + " %");
         }else{
-            mForgettingCurveTextView.setText("No record for calculation");
+                 mForgettingCurveTextView.setText("No record for calculation");
         }
     }
 
