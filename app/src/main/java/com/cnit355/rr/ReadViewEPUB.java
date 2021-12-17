@@ -1,5 +1,6 @@
 package com.cnit355.rr;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -46,6 +47,7 @@ import nl.siegmann.epublib.domain.TOCReference;
 import nl.siegmann.epublib.epub.EpubReader;
 
 import android.Manifest;
+import android.R.color;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -55,6 +57,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -132,6 +135,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     //dictWebView
     GestureDetector gs = null;
     static String favorStr = "None";
+    static DBHelper db;  //as global variable
 
 
     //    private TextView output_text;
@@ -141,6 +145,7 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = new DBHelper(this);
         setContentView(R.layout.activity_read_view_epub);
         mWebView = (WebView) findViewById(R.id.mWebView);
          textViewShowMean = (TextView) findViewById(R.id.textViewShowMean);
@@ -569,10 +574,33 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
                 case R.id.favoriteList:
 //                    testWV.highlightWord();
                     clickFavor = true;
+                    executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            int len = selectedWord.length();
+                            strMean = checkDict(selectedWord.substring(1,len-1));
+
+                            Log.v(TAG, "Webview meaning return strMean: " + strMean);
+                            textViewShowMean.setText(selectedWord+": "+strMean);}});
+
+//                    to use: create
+
+                     Boolean insertWord = db.insertFavouriteWord(Login.currentUser, selectedWord, strMean);
+                    if(insertWord==true){
+                        Toast.makeText(this.context, "Favourite word saved!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(this.context, "Could not save favourite word", Toast.LENGTH_SHORT).show();
+                    }
+
                     showPopup();
 
                     Log.v(TAG, "Webview favorite list: " + favorStr);
-                    Toast.makeText(this.context, "Notes are added"+favorStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.context, "Notes are added ", Toast.LENGTH_SHORT).show();
                     break;
             }
             actionMode.finish();
@@ -586,12 +614,13 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
             PopupWindow window = new PopupWindow(this.context);
             window.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
             window.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-
+//            window.setBackground(Color.YELLOW);
             window.setTouchable(true);
             window.setFocusable(true);
 
             EditText text = new EditText(this.context);
-            text.setText("Notes for "+selectedWord+": ");
+            text.setTextColor(Color.WHITE);
+            text.setText("Definition: "+strMean+"\n\nNotes for "+selectedWord+": ");
 
 
 
@@ -601,9 +630,12 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
 
             text.addTextChangedListener(new TextWatcher() {
 
+                private Context context;
+
                 @Override
                 public void afterTextChanged(Editable s) {
-                    favorStr = s.toString();
+//                    String notes = s.toString();
+//                    Toast.makeText(this.context, "Saved!", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
