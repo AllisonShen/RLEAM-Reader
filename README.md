@@ -1,5 +1,7 @@
 # RLEAM-Reader
-[RLEAM Reader: Read, Learn, and Memorize](https://github.com/AllisonShen/RLEAM-Reader)
+RLEAM Reader: Read, Learn, and Memorize
+- [Github](https://github.com/AllisonShen/RLEAM-Reader)
+- [Report](https://www.overleaf.com/read/hhpwthfhncgr)
 
 ## Introduction
 RLEAM Reader is designed to build a seamless and immersive way for users to read, learn and memorize while reading ebook/documents which include complex vocabularies.
