@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 //code for helper class/login/register: https://www.learnandroid.net/2020/05/login-and-register-activity-using.html
 //code for cursor querying: https://www.geeksforgeeks.org/how-to-read-data-from-sqlite-database-in-android/
@@ -103,14 +105,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void deleteFavouriteWord(String username, String word) {
+
+        SQLiteDatabase DB = this.getWritableDatabase();
+        // after adding all values we are passing
+        // content values to our table.
+        DB.execSQL("Delete from favourites where username = ? and word= ?", new String[] {username, word});
+
+    }
+
     //to use: create  DBHelper db = new DBHelper(this); as global variable
-    // Boolean insertWord = db.insertFavouriteWord(Login.currentUser, word);
+    // Boolean insertWord = db.insertFavouriteWord(Login.currentUser, word, explanation);
     //            if(insertWord==true){
     //                Toast.makeText(this, "Favourite word saved!", Toast.LENGTH_SHORT).show();
     //            }else{
     //                Toast.makeText(this, "Could not save favourite word", Toast.LENGTH_SHORT).show();
     //            }
-
 
     //method to see a users favourite words, returns array of the words
     public ArrayList<String> favouriteWords(String username) {
