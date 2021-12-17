@@ -3,6 +3,8 @@ package com.cnit355.rr;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,15 +21,19 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.cnit355.rr.databinding.ActivityMainBinding;
 
+//code for menu items: https://www.journaldev.com/9357/android-actionbar-example-tutorial
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-
+    DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db= new DBHelper(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -44,7 +51,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.navigation_favList:
+                Intent favList = new Intent(this, FavouriteList.class);
+                startActivity(favList);
+                return true;
+            case R.id.navigation_forgetCurve:
+                Toast.makeText(this, "Selected forgetting curve", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_signout:
+                Intent mIntent = new Intent(this, Login.class);
+                startActivity(mIntent);
+                db.closeDB(); //close database
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void viewDetailsPDF(View view){
         Intent mIntent = new Intent(this, ReadViewEPUB.class);
