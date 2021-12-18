@@ -29,7 +29,7 @@ Reading is implemented with the read view, which integrates hand gestures like t
 * Database: SQLite
 * Thread, ExecutorService, Handler (In android calling network requests on the main thread forbidden by default)
 * Gesture: Long pressed, Double Tap
-* HttpURLConnection
+* HttpURLConnection, JSONObject
 
 ## Useful Links
  - [Good README Files](https://courses.cs.washington.edu/courses/cse326/02wi/homework/hw5/good-readmes.html)
