@@ -54,3 +54,10 @@ Reading is implemented with the read view, which integrates hand gestures like t
  - [Type BuildConfig is defined multiple times](https://stackoverflow.com/questions/60507686/type-buildconfig-is-defined-multiple-times)
  - [Unable to resolve host "<URL here>" No address associated with host name [closed]](https://stackoverflow.com/questions/6355498/unable-to-resolve-host-url-here-no-address-associated-with-host-name)
  - [How to load external webpage in WebView](https://stackoverflow.com/questions/7305089/how-to-load-external-webpage-in-webview)
+
+
+## Contack Information  
+ * Xiaxin Shen: shen452@purdue.edu
+ * Xiaoyu Guo: guo496@purdue.edu
+ * Onyinyechi Blossom Nwogu: onwogu@purdue.edu
+   
