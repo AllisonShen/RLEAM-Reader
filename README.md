@@ -2,11 +2,26 @@
 [RLEAM Reader: Read, Learn, and Memorize](https://github.com/AllisonShen/RLEAM-Reader)
 - [Github](https://github.com/AllisonShen/RLEAM-Reader)
 - [Report](https://www.overleaf.com/read/hhpwthfhncgr)
+- [Demo](https://drive.google.com/file/d/1cGSpRCIxW30z4DkDqQqYOaX_F2uMkqr7/view?usp=sharing)
 
 ## Introduction
-RLEAM Reader is designed to build a seamless and immersive way for users to read, learn and memorize while reading ebook/documents which include complex vocabularies.
+RLEAM Reader is designed to build a seamless and immersive way for users to read, learn and memorize while reading ebook/documents which include complex vocabularies. (RLEAM = **R**ead, **LEA**rn, **M**emorize)
+
 
 Reading is implemented with the read view, which integrates hand gestures like tapping and long pressing. The learning function is facilitated with flashcards design. The memorizing funciton is implemented based on forgetting curve. These three main functions comprise of the RLEAM Reader.
+
+* Read 
+    * The App can accept PDF and EPUB format 
+    * Reading is implemented with the read view, which integrates hand gestures like double-tap to close and long press to open the customized menu
+    * Corresponding files: PdfActivity.java, ReadViewEPUB.java, HomeFragment.java
+* Learn
+    * Customized Menu for long-press, a popup window, and a TextView is developed for showing the page with a specific URL and showing the definition retrieved from Oxford Dictionary API  
+    * A database is created for saving each user’s account information and their personalized data including a favorite list (word & definition), remember count and forget count
+    * Corresponding files: DBHelper.java, ReadViewEPUB.java, Login.java, RegisterActivity, ToastMenuItemListener
+
+* Memorize
+    * The memorizing function is facilitated with flashcards design. The memorizing function is implemented based on the forgetting curve. Memorizing is designed to present users with flashcards of the words in the personalized favorites list. It will first test if the user remembers the meaning of the word by making the meaning invisible. Users can either choose to remember or forget to show the memorization situation for that specific word. It will count and store the number of times that the user clicks remember or forget. The forgetting curve will utilize these records to calculate the retrievability of a user to remember a word. 
+    * Corresponding files: FavouriteList.java, QuestionsModel.java, DashboardFragment.java
 
 ## Environment
 * API 30
