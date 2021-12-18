@@ -28,6 +28,10 @@ Reading is implemented with the read view, which integrates hand gestures like t
 * Test Emulator: Pixel
 * Android 11.0
 
+## Instructions
+* Install: Download the zip file and unzip the files or clone our project. Open the our project folder on Android Studio. 
+* Configure: Need to synchronize the build gradle dependencies. Please install and apply Android SDK with API level equal to or higher than 30. 
+* Run: In AVD Manager, create a virtual device using Pixel with API level equal to or higher than 30.
 
 ## External Libraries
 * epublib-core-latest.jar(https://github.com/psiegman/epublib)
