@@ -97,7 +97,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import javax.net.ssl.HttpsURLConnection;
-//implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
 
 
 public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
@@ -106,18 +105,11 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     int index;
     private GestureDetectorCompat gDetector;
     protected final int PERMISSION_REQUEST = 42;
-    //    private ResultProfileBinding binding;
     private static final String TAG = "ReadViewEPUB";
-
-    //    private MyAdatper mAdatper;
     private RecyclerView mRecycler;
     private Book book;
     static Thread threadCheckDict;
     static String strMean = "None";
-    //        View view = binding.getRoot();
-//        setContentView(view);
-//        recycler
-//        mRecycler = (RecyclerView) findViewById(R.id.recycler);
     public static WebView mWebView;
     public static WebView dictWebView;
 
@@ -132,14 +124,9 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     //use Executor instead
     static ExecutorService executor = Executors.newSingleThreadExecutor();
     static Handler handler = new Handler(Looper.getMainLooper());
-    //dictWebView
     GestureDetector gs = null;
     static String favorStr = "None";
     static DBHelper db;  //as global variable
-
-
-    //    private TextView output_text;
-//    output_text = (TextView) findViewById(R.id.outputText);
     String output_text;
 
     @Override
@@ -244,25 +231,6 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
         } catch (IOException e) {
             Log.e("epublib", e.getMessage());
         }
-//        threadCheckDict = new Thread(new Runnable() {
-//            String strMean;
-//
-//            @Override
-//            public void run() {
-//                try {
-//                    //Your code goes here
-//                    strMean = checkDict(selectedWord);
-//                    Log.v(TAG, "Webview meaning: " + strMean);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
-
-
-
-
     }
     private static String checkDictTwo(String selectedWord) throws IOException {
         String word = selectedWord;
@@ -488,22 +456,6 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
     }
 
 
-//    private void emulateShiftHeld(WebView view)
-//    {
-//        try
-//        {
-//            KeyEvent shiftPressEvent = new KeyEvent(0, 0, KeyEvent.ACTION_DOWN,
-//                    KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0);
-//            shiftPressEvent.dispatch(view);
-//            Toast.makeText(this, "select_text_now", Toast.LENGTH_SHORT).show();
-//        }
-//        catch (Exception e)
-//        {
-//            Log.e("dd", "Exception in emulateShiftHeld()", e);
-//        }
-//    }
-
-
     private static class ToastMenuItemListener implements MenuItem.OnMenuItemClickListener {
 
         private final Context context;
@@ -622,14 +574,10 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
             text.setTextColor(Color.WHITE);
             text.setText("Definition: "+strMean+"\n\nNotes for "+selectedWord+": ");
 
-
-
             window.setContentView(text);
             window.showAtLocation(text, Gravity.NO_GRAVITY, 30, 30);
 
-
             text.addTextChangedListener(new TextWatcher() {
-
                 private Context context;
 
                 @Override
@@ -649,14 +597,6 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
 
                 }
             });
-
-
-
-//            EditText notes = new EditText(this.context);
-//            text.setText("Notes");
-//
-//            window.setContentView(notes);
-//            window.showAtLocation(notes, Gravity.NO_GRAVITY, 30, 30);
         }
     }
 
@@ -689,15 +629,6 @@ public class ReadViewEPUB extends AppCompatActivity implements GestureDetector.O
         }
 
     }
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem menuItem) {
-//        switch (menuItem.getItemId()) {
-//            case android.R.id.close_webview:
-//                finish();
-//                break;
-//        }
-//        return (super.onOptionsItemSelected(menuItem));
-//    }
 }
 
 

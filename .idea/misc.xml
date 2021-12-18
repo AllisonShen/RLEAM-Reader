@@ -7,9 +7,12 @@
         <entry key="app/src/main/res/drawable-anydpi/mem.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/pdftest_background.xml" value="0.18564102564102564" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/activity_pdf.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_read_view_epub.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.11005434782608696" />
+        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.11094224924012158" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1453125" />
         <entry key="app/src/main/res/menu/close_web_view.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/menu/copy_share_menu.xml" value="0.12916666666666668" />

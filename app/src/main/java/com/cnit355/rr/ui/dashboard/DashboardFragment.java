@@ -241,8 +241,14 @@ public class DashboardFragment extends Fragment {
         if (rememberCount[mCurrentIndex] != 0 || forgetCount[mCurrentIndex] != 0) {
             double probability =Math.round((double)rememberCount[mCurrentIndex] / (rememberCount[mCurrentIndex] + forgetCount[mCurrentIndex]) * 100) ;
             mForgettingCurveTextView.setText("The probability for retrieving this word is " + probability + " %");
+            String result = "The probability for retrieving this word is " + probability + " %";
+            Toast.makeText(this.getContext(), result, Toast.LENGTH_LONG).show();
+
         }else{
+            String result = "No record for calculation";
                  mForgettingCurveTextView.setText("No record for calculation");
+            Toast.makeText(this.getContext(), result, Toast.LENGTH_LONG).show();
+
         }
     }
 
