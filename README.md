@@ -1,5 +1,5 @@
 # RLEAM-Reader
-RLEAM Reader: Read, Learn, and Memorize
+[RLEAM Reader: Read, Learn, and Memorize](https://github.com/AllisonShen/RLEAM-Reader)
 - [Github](https://github.com/AllisonShen/RLEAM-Reader)
 - [Report](https://www.overleaf.com/read/hhpwthfhncgr)
 
