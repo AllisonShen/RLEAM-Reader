@@ -31,7 +31,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
-    private Button mImportButton;
+    private Button mImportPdfButton;
+    private Button mImportEpubButton;
 
     Context context;
     Uri uri;
@@ -55,11 +56,19 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         context = rootView.getContext();//Assign your rooView to context
 
-        mImportButton = binding.button2;
-        mImportButton.setOnClickListener(new View.OnClickListener() {
+        mImportPdfButton = binding.button2;
+        mImportPdfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openPdf();
+            }
+        });
+
+        mImportEpubButton = binding.button4;
+        mImportEpubButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEpub();
             }
         });
 
@@ -82,30 +91,40 @@ public class HomeFragment extends Fragment {
 
  */
 
+
     ActivityResultLauncher<Intent> sActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                   // if (result.getResultCode() == Activity.RESULT_OK){
+                   if (result.getResultCode() == Activity.RESULT_OK){
                         Intent data = result.getData();
                         uri = data.getData();
-                   // }
+                   }
                 }
             }
 
     );
 
+
+
     public void openPdf(){
+        //Intent data = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        //data.setType("application/pdf");
+        //data = Intent.createChooser(data, "Choose a file");
+        //sActivityResultLauncher.launch(data);
+
+        Intent mIntent = new Intent(context, PdfActivity.class);
+        mIntent.putExtra("ViewType", "storage");
+        startActivity(mIntent);
+
+    }
+
+    public void openEpub(){
         Intent data = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        data.setType("application/pdf");
+        data.setType("application/epub+zip");
         data = Intent.createChooser(data, "Choose a file");
         sActivityResultLauncher.launch(data);
-
-        //Intent mIntent = new Intent(context, PdfActivity.class);
-        //mIntent.putExtra("qString", uri.toString());
-        //startActivity(mIntent);
-
     }
 
 
