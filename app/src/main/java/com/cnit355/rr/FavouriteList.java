@@ -22,19 +22,28 @@ public class FavouriteList extends AppCompatActivity {
 
         db=new DBHelper(this);
 
-        ArrayList <String> words = db.favouriteWords(Login.currentUser); //db fav words has [hi, scrupulous]
-        ArrayList <String> explanations= db.favouriteWordExplanations(Login.currentUser);
+        if (!db.favouriteWords(Login.currentUser).isEmpty()){
+            try{
 
-        TextView list= findViewById(R.id.textViewList);
+                ArrayList <String> words = db.favouriteWords(Login.currentUser);
+                ArrayList <String> explanations= db.favouriteWordExplanations(Login.currentUser);
 
-        String word_list="";
+                TextView list= findViewById(R.id.textViewList);
 
-        for (int i = 0; i < words.size(); i++) {
-            // Printing and display the elements in ArrayList
-            word_list +=words.get(i).toUpperCase() + ": " + explanations.get(i)+ '\n' + '\n';
+                String word_list="";
+
+                for (int i = 0; i < words.size(); i++) {
+                    // Printing and display the elements in ArrayList
+                    word_list +=words.get(i).toUpperCase() + ": " + explanations.get(i)+ '\n' + '\n';
+                }
+
+                list.setText(word_list);
+
+            }catch (Exception e){
+            }
+
         }
 
-        list.setText(word_list);
 
     }
 }
