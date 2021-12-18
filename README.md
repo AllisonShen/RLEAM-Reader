@@ -50,6 +50,11 @@ Reading is implemented with the read view, which integrates hand gestures like t
 * Gesture: Long pressed, Double Tap
 * HttpURLConnection, JSONObject
 
+## Acknowledgements
+* Thanks to all the github examples, useful links.
+* Thanks to the teaching and help of our professor Byung-Cheol Min
+* Thanks to the help of our TA Su Sun
+
 ## Useful Links
  - [Good README Files](https://courses.cs.washington.edu/courses/cse326/02wi/homework/hw5/good-readmes.html)
  - [How to add a jar in External Libraries in Android Studio?](https://stackoverflow.com/questions/25660166/how-to-add-a-jar-in-external-libraries-in-android-studio)
