@@ -30,7 +30,7 @@ Reading is implemented with the read view, which integrates hand gestures like t
 
 ## Instructions
 * Install: Download the zip file and unzip the files or clone our project. Open the our project folder on Android Studio. 
-* Configure: Need to synchronize the build gradle dependencies. Please install and apply Android SDK with API level equal to or higher than 30. 
+* Configure: Need to synchronize the build gradle dependencies. Please install and apply Android SDK with API level equal to or higher than 30. Put all .jar files in lib folder. Then, right click them and click "Add as Library". Next, add them to the gradle file.
 * Run: In AVD Manager, create a virtual device using Pixel with API level equal to or higher than 30.
 
 ## External Libraries
@@ -59,10 +59,12 @@ Reading is implemented with the read view, which integrates hand gestures like t
  - [Unable to resolve host "<URL here>" No address associated with host name [closed]](https://stackoverflow.com/questions/6355498/unable-to-resolve-host-url-here-no-address-associated-with-host-name)
  - [How to load external webpage in WebView](https://stackoverflow.com/questions/7305089/how-to-load-external-webpage-in-webview)
 
-## Contack Information
+## Contact Information
  * Xiaxin Shen: shen452@purdue.edu
  * Xiaoyu Guo: guo496@purdue.edu
  * Onyinyechi Blossom Nwogu: onwogu@purdue.edu
 
 ## Licensing Information
 * MIT License
+## Software Version
+* 1.0
